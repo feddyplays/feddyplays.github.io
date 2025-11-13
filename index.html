@@ -2,41 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title></title>
+  <title>Ruffle SWF Loader</title>
   <style>
-    /* Reset margins and make body fill the screen */
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      background: transparent; /* no background color */
-      overflow: hidden;
+    body {
+      background: #222;
+      color: #eee;
+      font-family: sans-serif;
+      text-align: center;
     }
-
-    /* Container fills the entire viewport */
     #flash-container {
-      width: 100%;
-      height: 100%;
-    }
-
-    /* Make the Ruffle player fill its container */
-    ruffle-player {
-      width: 100%;
-      height: 100%;
-      display: block;
-      border: none;
+      width: 800px;
+      height: 600px;
+      margin: 20px auto;
+      background: #000;
     }
   </style>
 </head>
 <body>
+  <h1>Right click on the game screen and press "Enter Fullscreen"</h1>
   <div id="flash-container"></div>
 
   <!-- Load Ruffle -->
   <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
   <script>
+    // Path to your SWF file
     const swfFile = "Pico's School.swf"; // replace with your .swf filename
 
+    // Create Ruffle player
     window.addEventListener("DOMContentLoaded", () => {
       const ruffle = window.RufflePlayer.newest();
       const player = ruffle.createPlayer();
@@ -44,12 +36,6 @@
 
       // Load the SWF file
       player.load(swfFile);
-
-      // Ensure resizing works smoothly
-      window.addEventListener("resize", () => {
-        player.style.width = "100%";
-        player.style.height = "100%";
-      });
     });
   </script>
 </body>
