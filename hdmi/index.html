@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Capture Card Viewer</title>
+  <style>
+    body {
+      background:#0f0f0f;
+      color:#fff;
+      font-family:Arial, sans-serif;
+      margin:0;
+      padding:20px;
+    }
+
+    .panel {
+      background:#1c1c1c;
+      padding:15px;
+      border-radius:10px;
+      max-width:600px;
+      margin-bottom:20px;
+    }
+
+    label {
+      display:block;
+      margin-top:10px;
+      font-size:14px;
+      opacity:0.8;
+    }
+
+    select, button {
+      width:100%;
+      padding:10px;
+      margin-top:5px;
+      border-radius:6px;
+      border:none;
+      background:#2a2a2a;
+      color:#fff;
+      font-size:15px;
+    }
+
+    button {
+      background:#0078ff;
+      cursor:pointer;
+      margin-top:15px;
+    }
+
+    button:hover {
+      background:#0a8bff;
+    }
+
+    video {
+      width:100%;
+      max-width:100%;
+      background:#000;
+      border-radius:10px;
+      margin-top:20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="panel">
+  <h2>Capture Card Viewer</h2>
+
+  <label>Video Device</label>
+  <select id="videoDevices">
+    <option>Loading…</option>
+  </select>
+
+  <label>Audio Device</label>
+  <select id="audioDevices">
+    <option>Loading…</option>
+  </select>
+
+  <label>Resolution</label>
+  <select id="resolution">
+    <option value="480">480p</option>
+    <option value="1080" selected>1080p</option>
+    <option value="1440">2K (1440p)</option>
+    <option value="2160">4K (2160p)</option>
+  </select>
+
+  <button id="startBtn">Start Capture</button>
+  <button id="stopBtn" style="background:#444;">Stop Capture</button>
+</div>
+
+<video id="preview" autoplay playsinline></video>
+
+<script>
+  const videoEl = document.getElementById('preview');
+  const videoDevices = document.getElementById('videoDevices');
+  const audioDevices = document.getElementById('audioDevices');
+  const resolution = document.getElementById('resolution');
+
+  let currentStream = null;
+
+  async function requestPermission() {
+    try {
+      await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    } catch (err) {
+      alert("Permission required to show devices.");
+    }
+  }
+
+  async function listDevices() {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+
+    videoDevices.innerHTML = "";
+    audioDevices.innerHTML = "";
+
+    let vCount = 0;
+    let aCount = 0;
+
+    devices.forEach(device => {
+      const opt = document.createElement("option");
+      opt.value = device.deviceId;
+      opt.text = device.label || "(Unnamed device)";
+
+      if (device.kind === "videoinput") {
+        videoDevices.appendChild(opt);
+        vCount++;
+      }
+
+      if (device.kind === "audioinput") {
+        audioDevices.appendChild(opt);
+        aCount++;
+      }
+    });
+
+    if (vCount === 0)
+      videoDevices.innerHTML = "<option>No video devices found</option>";
+
+    if (aCount === 0)
+      audioDevices.innerHTML = "<option>No audio devices found</option>";
+  }
+
+  async function startCapture() {
+    if (currentStream) stopCapture();
+
+    const height = parseInt(resolution.value, 10);
+    const width = Math.round(height * 16 / 9);
+
+    const constraints = {
+      video: {
+        deviceId: videoDevices.value.includes("No video") ? undefined : { exact: videoDevices.value },
+        width: { ideal: width },
+        height: { ideal: height },
+        frameRate: { ideal: 60 }
+      },
+      audio: audioDevices.value.includes("No audio") ? false : {
+        deviceId: { exact: audioDevices.value },
+        echoCancellation: false,
+        noiseSuppression: false,
+        autoGainControl: false
+      }
+    };
+
+    try {
+      currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+      videoEl.srcObject = currentStream;
+    } catch (err) {
+      alert("Error: " + err.message);
+    }
+  }
+
+  function stopCapture() {
+    if (currentStream) {
+      currentStream.getTracks().forEach(t => t.stop());
+      currentStream = null;
+      videoEl.srcObject = null;
+    }
+  }
+
+  document.getElementById("startBtn").onclick = startCapture;
+  document.getElementById("stopBtn").onclick = stopCapture;
+
+  // Permission FIRST → then device list
+  requestPermission().then(listDevices);
+</script>
+
+</body>
+</html>
