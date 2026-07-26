@@ -35,7 +35,9 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                overflow: hidden;
+                /* allow scrolling so the game can be moved on small screens */
+                overflow: auto;
+                -webkit-overflow-scrolling: touch;
                 flex-direction: column;
                 gap: 1rem;
                 padding-bottom: 22rem;
@@ -51,8 +53,8 @@
             canvas {
                 image-rendering: optimizeSpeed;
                 -webkit-interpolation-mode: nearest-neighbor;
-                -ms-touch-action: none;
-                touch-action: none;
+                -ms-touch-action: auto;
+                touch-action: auto;
                 margin: 0;
                 padding: 0;
                 border: 0;
