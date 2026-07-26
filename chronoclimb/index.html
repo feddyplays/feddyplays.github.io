@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <!-- Custom PreHead code is injected here -->
+
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name ="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta charset="utf-8"/>
+
+        <!-- Builtin injector for disabling cache -->
+        <meta http-equiv="pragma" content="no-cache"/>
+
+        <!-- Set the title bar of the page -->
+        <title>Chrono Climb</title>
+
+        <!-- Custom PreStyle code is injected here -->
+        
+
+        <!-- Set the background colour of the document -->
+        <style>
+            html, body {
+                background: #000000;
+                color: #cccccc;
+                margin: 0;
+                padding: 0;
+                border: 0;
+                width: 100%;
+                min-height: 100vh;
+            }
+
+            body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+            }
+
+            canvas {
+                image-rendering: optimizeSpeed;
+                -webkit-interpolation-mode: nearest-neighbor;
+                -ms-touch-action: none;
+                touch-action: none;
+                margin: 0;
+                padding: 0;
+                border: 0;
+                width: min(100vw, 100vh);
+                height: min(100vw, 100vh);
+                display: block;
+            }
+            :-webkit-full-screen #canvas {
+                width: 100%;
+                height: 100%;
+            }
+            :-webkit-full-screen {
+                width: 100%;
+                height: 100%;
+            }
+            
+            /* Custom Runner Styles */
+            div.gm4html5_div_class {
+                margin: 0;
+                padding: 0;
+                border: 0;
+                width: 100%;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            div.gm4html5_login {
+                padding: 20px;
+                position: absolute;
+                border: solid 2px #000000;
+                background-color: #404040;
+                color:#00ff00;
+                border-radius: 15px;
+                box-shadow: #101010 20px 20px 40px;
+            }
+            div.gm4html5_cancel_button {
+                float: right;
+            }
+            div.gm4html5_login_button {
+                float: left;
+            }
+            div.gm4html5_login_header {
+                text-align: center;
+            }
+            /* END - Custom Runner Styles */
+            
+            /* Mobile controls overlay */
+            #mobile-controls-toggle {
+                position: fixed;
+                right: 1rem;
+                bottom: 1rem;
+                z-index: 1001;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            #mobileControlsToggleButton {
+                padding: 0.8rem 1rem;
+                border: none;
+                border-radius: 14px;
+                background: rgba(0, 0, 0, 0.75);
+                color: #ffffff;
+                font-size: 0.95rem;
+                cursor: pointer;
+                box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+            }
+            #mobile-controls {
+                position: fixed;
+                left: 50%;
+                bottom: 1rem;
+                transform: translateX(-50%);
+                z-index: 1000;
+                display: grid;
+                grid-template-columns: repeat(3, 4.5rem);
+                grid-template-rows: repeat(3, 4.5rem);
+                gap: 0.5rem;
+                padding: 0.5rem;
+                background: rgba(10, 10, 10, 0.88);
+                border: 1px solid #444;
+                border-radius: 20px;
+                backdrop-filter: blur(8px);
+                justify-items: center;
+                align-items: center;
+            }
+            #mobile-controls.hidden {
+                display: none;
+            }
+            .mobile-control-button {
+                width: 4.2rem;
+                height: 4.2rem;
+                border: none;
+                border-radius: 14px;
+                background: rgba(255, 255, 255, 0.08);
+                color: #ffffff;
+                font-size: 1.2rem;
+                touch-action: manipulation;
+                user-select: none;
+            }
+            .mobile-control-button.active {
+                background: rgba(0, 255, 128, 0.25);
+                box-shadow: inset 0 0 0 1px rgba(0, 255, 128, 0.8);
+            }
+            .mobile-control-button:active {
+                transform: scale(0.98);
+            }
+            .control-up {
+                grid-column: 2;
+                grid-row: 1;
+            }
+            .control-left {
+                grid-column: 1;
+                grid-row: 2;
+            }
+            .control-action {
+                grid-column: 2;
+                grid-row: 2;
+            }
+            .control-right {
+                grid-column: 3;
+                grid-row: 2;
+            }
+            .control-down {
+                grid-column: 2;
+                grid-row: 3;
+            }
+            
+        </style>
+
+        <!-- Custom PostStyle code is injected here -->
+        
+
+        <!-- Builtin injector for injecting flurry analytics code -->
+        
+    </head>
+
+    <!-- Custom PostHead code is injected here -->
+    
+
+    <!-- Custom PreBody code is injected here -->
+    
+
+    <body>
+        <!-- Custom BodyStart code is injected here -->
+        
+
+        <div class="gm4html5_div_class" id="gm4html5_div_id">
+            
+            <!-- Builtin injector for splash screen -->
+            
+
+            <!-- Custom PreCanvas code is injected here -->
+            
+
+            <!-- Create the canvas element the game draws to -->
+            <canvas id="canvas" width="720" height="720" >
+                
+                <p>Your browser doesn't support HTML5 canvas.</p>
+            </canvas>
+            
+            <!-- Custom PostCanvas code is injected here -->
+            
+            <div id="mobile-controls-toggle">
+                <button id="mobileControlsToggleButton" type="button">Mobile Controls</button>
+            </div>
+
+            <div id="mobile-controls" class="hidden" aria-hidden="true">
+                <button class="mobile-control-button control-up" data-key="up" type="button">↑</button>
+                <button class="mobile-control-button control-left" data-key="left" type="button">←</button>
+                <button class="mobile-control-button control-action" data-key="action" type="button">Z</button>
+                <button class="mobile-control-button control-right" data-key="right" type="button">→</button>
+                <button class="mobile-control-button control-down" data-key="down" type="button">↓</button>
+            </div>
+            
+        </div>
+
+        <!-- Run the game code -->
+        <script type="text/javascript" src="html5game/Chrono Climb.js?cachebust=1660483847"></script>
+
+        <!-- Builtin injector for injecting runner path -->
+        
+
+        <script>
+            function resizeGameCanvas() {
+                const canvas = document.getElementById('canvas');
+                if (!canvas) return;
+                const size = Math.min(window.innerWidth, window.innerHeight);
+                canvas.style.width = size + 'px';
+                canvas.style.height = size + 'px';
+            }
+
+            const mobileControlKeys = {
+                left: 37,
+                up: 38,
+                right: 39,
+                down: 40,
+                action: 90
+            };
+
+            const mobileKeyMap = {
+                37: { key: 'ArrowLeft', code: 'ArrowLeft' },
+                38: { key: 'ArrowUp', code: 'ArrowUp' },
+                39: { key: 'ArrowRight', code: 'ArrowRight' },
+                40: { key: 'ArrowDown', code: 'ArrowDown' },
+                90: { key: 'z', code: 'KeyZ' }
+            };
+
+            function createKeyboardEvent(type, keyCode) {
+                const mapping = mobileKeyMap[keyCode] || { key: '', code: '' };
+                const event = new KeyboardEvent(type, {
+                    bubbles: true,
+                    cancelable: true,
+                    key: mapping.key,
+                    code: mapping.code,
+                    keyCode,
+                    which: keyCode
+                });
+                Object.defineProperty(event, 'keyCode', { get: () => keyCode });
+                Object.defineProperty(event, 'which', { get: () => keyCode });
+                return event;
+            }
+
+            function sendMobileKeyEvent(keyCode, type) {
+                const event = createKeyboardEvent(type, keyCode);
+                window.dispatchEvent(event);
+                document.dispatchEvent(event);
+            }
+
+            function handleMobileControl(button, type) {
+                const keyName = button.dataset.key;
+                const keyCode = mobileControlKeys[keyName];
+                if (!keyCode) return;
+                button.classList.toggle('active', type === 'keydown');
+                sendMobileKeyEvent(keyCode, type);
+            }
+
+            function setupMobileControls() {
+                const toggleButton = document.getElementById('mobileControlsToggleButton');
+                const controls = document.getElementById('mobile-controls');
+                if (!toggleButton || !controls) return;
+
+                toggleButton.addEventListener('click', () => {
+                    const hidden = controls.classList.toggle('hidden');
+                    controls.setAttribute('aria-hidden', hidden ? 'true' : 'false');
+                });
+
+                const buttons = controls.querySelectorAll('.mobile-control-button');
+                buttons.forEach((button) => {
+                    button.addEventListener('pointerdown', (event) => {
+                        event.preventDefault();
+                        handleMobileControl(button, 'keydown');
+                    });
+                    button.addEventListener('pointerup', (event) => {
+                        event.preventDefault();
+                        handleMobileControl(button, 'keyup');
+                    });
+                    button.addEventListener('pointercancel', (event) => {
+                        event.preventDefault();
+                        handleMobileControl(button, 'keyup');
+                    });
+                    button.addEventListener('pointerleave', (event) => {
+                        event.preventDefault();
+                        handleMobileControl(button, 'keyup');
+                    });
+                    button.addEventListener('contextmenu', (event) => event.preventDefault());
+                });
+            }
+
+            window.addEventListener('resize', resizeGameCanvas);
+            window.addEventListener('load', () => {
+                resizeGameCanvas();
+                setupMobileControls();
+                if (typeof GameMaker_Init === 'function') {
+                    GameMaker_Init();
+                }
+            });
+        </script>
+
+        <!-- Builtin injector for injecting google analytics code -->
+        
+
+        <!-- Custom BodyEnd code is injected here -->
+        
+    </body>
+
+    <!-- Custom PostBody code is injected here -->
+    
+</html>
